@@ -15,20 +15,22 @@ class ChatApp:
             with st.chat_message(message["role"]):
                 st.markdown(message["content"])
     
-    def handle_user_input(self):
+    def handle_user_input(self, extracted_text=None):
         """사용자의 입력을 처리하고 응답을 표시한다."""
         prompt = st.chat_input("질문을 입력해주세요.")
         if prompt:
-            self.history.add_message("user", prompt)
+            # PDF에서 추출된 텍스트와 함께 프롬프트 처리
+            final_prompt = prompt if not extracted_text else f"{extracted_text}\n{prompt}"
+            
+            self.history.add_message("user", final_prompt)
             with st.chat_message("user"):
-                st.markdown(prompt)
+                st.markdown(final_prompt)
             
             # 모델에 사용자 입력을 전달하고 응답을 받는다
-            stream = self.model.get_response(stream)
+            response = self.model.get_response(final_prompt)
             
             # 응답을 화면에 표시
             with st.chat_message("assistant"):
-              restonse = st.write_stream(stream)
+                st.write(response)
             
             self.history.add_message("assistant", response)
-            

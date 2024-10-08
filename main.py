@@ -1,7 +1,7 @@
 import streamlit as st
 from app_factory import AppFactory
 from pdf_handler import upload_and_extract_pdf
-from tavily_search_handler import search_web
+from search_handler import search_web
 from thread_handler import save_thread, load_thread, list_threads
 from code_interpreter import execute_code
 
